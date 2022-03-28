@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://oms.rt.ru" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	targetNamespace="http://oms.rt.ru">
+
+	<wsdl:types>
+		<xs:schema targetNamespace="http://oms.rt.ru">
+			<xs:element name="getCfsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="originator" type="xs:string"/> <!-- ??????? - ???????? ??????? -->
+						<xs:element minOccurs="1" maxOccurs="1" name="receiver" type="xs:string"/> <!-- ??????? - ??????? ??????? -->
+						<xs:element minOccurs="0" maxOccurs="1" name="cfsId" type="xs:string"/> <!-- ????? ?? CFS_ID -->
+						<xs:element minOccurs="0" maxOccurs="1" name="cfsSpecId" type="xs:string"/> <!-- ????? ?? CFS_SPEC_ID -->
+						<xs:element minOccurs="0" maxOccurs="1" name="cfsStatus" type="xs:string"/> <!-- ????? ?? ??????? -->
+						<xs:element minOccurs="0" maxOccurs="1" name="subscriptionId" type="xs:string"/> <!-- ????? ?? ?????? ?? (Subscription) -->
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getRfsRequest">
+				<xs:complexType>
+					<xs:all>
+						<xs:element minOccurs="1" maxOccurs="1" name="originator" type="xs:string"/> <!-- ??????? - ???????? ??????? -->
+						<xs:element minOccurs="1" maxOccurs="1" name="receiver" type="xs:string"/> <!-- ??????? - ??????? ??????? -->
+						<xs:element minOccurs="0" maxOccurs="1" name="rfsId" type="xs:string"/> <!-- ????? ?? RFS_ID -->
+					</xs:all>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getRfsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="originator" type="xs:string"/> <!-- ??????? - ???????? ??????? -->
+						<xs:element minOccurs="1" maxOccurs="1" name="receiver" type="xs:string"/> <!-- ??????? - ??????? ??????? -->
+						<xs:element minOccurs="0" maxOccurs="1" name="rfsId" type="xs:string"/> <!-- ????? ?? RFS_ID -->
+						<xs:element minOccurs="0" maxOccurs="1" name="rfsSpecId" type="xs:string"/> <!-- ????? ?? RFS_SPEC_ID -->
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+
+			<xs:element name="getCfsRequest">
+				<xs:complexType>
+					<xs:all>
+						<xs:element minOccurs="1" maxOccurs="1" name="originator" type="xs:string"/> <!-- ??????? - ???????? ??????? -->
+						<xs:element minOccurs="1" maxOccurs="1" name="receiver" type="xs:string"/> <!-- ??????? - ??????? ??????? -->
+						<xs:element minOccurs="0" maxOccurs="1" name="cfsId" type="xs:string"/> <!-- ????? ?? CFS_ID -->
+					</xs:all>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+
+
+<!--Define input and output parameters -->
+	<wsdl:message name="getCfsRequest">
+		<wsdl:part element="tns:getCfsRequest" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="getCfsResponse">
+		<wsdl:part element="tns:getCfsResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="getRfsRequest">
+		<wsdl:part name="in" element="tns:getRfsRequest" />
+	</wsdl:message>
+	<wsdl:message name="getRfsResponse">
+		<wsdl:part name="out" element="tns:getRfsResponse" />
+	</wsdl:message>
+
+<!--Define port definition -->
+	<wsdl:portType name="SIWebServiceEndpoint">
+		<wsdl:operation name="getRfs">
+			<wsdl:input message="tns:getRfsRequest" />
+			<wsdl:output message="tns:getRfsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getCfs">
+			<wsdl:input message="tns:getCfsRequest" name="getCfsRequest"/>
+			<wsdl:output message="tns:getCfsResponse" name="getCfsResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+<!--Bind Soap operation and service -->
+	<wsdl:binding name="SIWebServiceNewBinding" type="tns:SIWebServiceEndpoint">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getCfs">
+			<soap:operation soapAction="" style="document"/>
+			<wsdl:input name="getCfsRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="getCfsResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRfs">
+			<soap:operation soapAction="http://oms.rt.ru"
+							style="document" />
+			<wsdl:input>
+				<soap:body parts="in" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="out" use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+<!--Define service -->
+	<wsdl:service name="SIWebServiceNew">
+		<wsdl:port name="SOATestEndpoint" binding="tns:SIWebServiceNewBinding">
+			<soap:address location="http://localhost:8080/oms/ws/newSI" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
